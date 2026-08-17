@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   ExternalLink,
   FileText,
-  History,
   Info,
   Search,
   ShieldAlert,
@@ -150,7 +149,7 @@ function ConfidenceMeter({ confidence }) {
 function Analyze() {
   const [inputMode, setInputMode] = useState("text");
 
-  const [headline, setHeadline] = useState("");
+
   const [articleText, setArticleText] = useState("");
   const [articleUrl, setArticleUrl] = useState("");
 
@@ -234,18 +233,17 @@ function Analyze() {
   }
 
   // Text mode
-  if (!headline.trim() && !articleText.trim()) {
-    setError("Please enter a headline or article text.");
-    return;
-  }
+  if (!articleText.trim()) {
+  setError("Please enter the article text.");
+  return;
+}
 
   setLoading(true);
 
   try {
     const data = await analyzeArticle(
-      headline.trim(),
-      articleText.trim(),
-    );
+  articleText.trim(),
+);
 
     setResult(data);
   } catch (err) {
@@ -266,7 +264,6 @@ function Analyze() {
   const handleAnalyzeAnother = () => {
     setResult(null);
     setError("");
-    setHeadline("");
 setArticleText("");
 setArticleUrl("");
 setInputMode("text");
@@ -841,23 +838,7 @@ setInputMode("text");
 
               {inputMode === "text" ? (
   <>
-    {/* HEADLINE */}
-    <div className="form-group">
-      <label htmlFor="headline">
-        Headline
-      </label>
-
-      <input
-        id="headline"
-        type="text"
-        value={headline}
-        onChange={(event) =>
-          setHeadline(event.target.value)
-        }
-        placeholder="Enter the news headline..."
-        disabled={loading}
-      />
-    </div>
+    
 
     {/* ARTICLE TEXT */}
     <div className="form-group">

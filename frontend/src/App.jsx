@@ -1,13 +1,14 @@
+import { useEffect, useState } from "react";
 import Analyze from "./pages/Analyze";
-import HistoryPage from "./pages/History";
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import {
   ShieldCheck,
   LayoutDashboard,
   Search,
-  History,
 } from "lucide-react";
 
+import { getModelMetrics } from "./services/api";
 import "./index.css";
 
 function Navbar() {
@@ -34,17 +35,47 @@ function Navbar() {
           <Search size={17} />
           Analyze
         </a>
-
-        <a href="/history">
-          <History size={17} />
-          History
-        </a>
       </div>
     </nav>
   );
 }
 
 function Dashboard() {
+  const [metrics, setMetrics] = useState(null);
+  const [metricsLoading, setMetricsLoading] = useState(true);
+  const [metricsError, setMetricsError] = useState("");
+
+  useEffect(() => {
+    let mounted = true;
+    async function loadMetrics() {
+      try {
+        const data = await getModelMetrics();
+        if (mounted) setMetrics(data);
+      } catch (error) {
+        if (mounted) {
+          setMetricsError(
+            error?.response?.data?.detail ||
+              "Unable to load model performance metrics."
+          );
+        }
+      } finally {
+        if (mounted) setMetricsLoading(false);
+      }
+    }
+    loadMetrics();
+    return () => { mounted = false; };
+  }, []);
+
+  const metricItems = [
+    { label: "Accuracy", key: "accuracy" },
+    { label: "Precision", key: "precision" },
+    { label: "Recall", key: "recall" },
+    { label: "F1 Score", key: "f1_score" },
+  ];
+
+  const formatMetric = (value) =>
+    typeof value === "number" ? `${(value * 100).toFixed(2)}%` : "—";
+
   return (
     <main className="page">
       <section className="hero">
@@ -68,6 +99,80 @@ function Dashboard() {
           <Search size={19} />
           Analyze a News Article
         </a>
+      </section>
+
+      <section className="model-performance">
+        <div className="model-performance-header">
+          <div>
+            <span className="section-label">MODEL PERFORMANCE</span>
+            <h2>Evaluation metrics</h2>
+            <p>
+              {metrics?.model || "TF-IDF + Logistic Regression"} ·{" "}
+              {metrics?.split === "holdout_test"
+                ? "Holdout test set"
+                : metrics?.split || "Test set"}
+              {metrics?.test_samples
+                ? ` · ${Number(metrics.test_samples).toLocaleString()} samples`
+                : ""}
+            </p>
+          </div>
+          {metrics && (
+            <div className="metrics-badge">
+              <ShieldCheck size={17} />
+              Test performance
+            </div>
+          )}
+        </div>
+
+        {metricsLoading && <div className="metrics-state">Loading model metrics…</div>}
+        {!metricsLoading && metricsError && (
+          <div className="metrics-error">{metricsError}</div>
+        )}
+
+        {!metricsLoading && !metricsError && metrics && (
+          <>
+            <div className="metric-card-grid">
+              {metricItems.map((item) => (
+                <div className="metric-card" key={item.key}>
+                  <span>{item.label}</span>
+                  <strong>{formatMetric(metrics[item.key])}</strong>
+                </div>
+              ))}
+            </div>
+
+            <div className="metrics-chart-card">
+              <div className="metrics-chart-title">
+                <div>
+                  <h3>Model Performance</h3>
+                  <p>Accuracy, precision, recall, and F1 score</p>
+                </div>
+                <span>0–100%</span>
+              </div>
+
+              <div className="metrics-bar-chart" role="img"
+                aria-label="Bar chart comparing accuracy, precision, recall, and F1 score">
+                {metricItems.map((item) => {
+                  const value =
+                    typeof metrics[item.key] === "number"
+                      ? Math.max(0, Math.min(1, metrics[item.key]))
+                      : 0;
+                  return (
+                    <div className="metric-bar-column" key={item.key}>
+                      <div className="metric-bar-value">
+                        {formatMetric(metrics[item.key])}
+                      </div>
+                      <div className="metric-bar-track">
+                        <div className="metric-bar"
+                          style={{ height: `${value * 100}%` }} />
+                      </div>
+                      <span>{item.label}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </>
+        )}
       </section>
 
       <section className="feature-grid">
@@ -97,18 +202,7 @@ function Dashboard() {
           </p>
         </div>
 
-        <div className="feature-card">
-          <div className="feature-icon">
-            <History size={23} />
-          </div>
-
-          <h3>Analysis History</h3>
-
-          <p>
-            Save and review previous analyses through the MongoDB-backed
-            history system.
-          </p>
-        </div>
+        
       </section>
 
       <section className="workflow">
@@ -177,17 +271,7 @@ function App() {
 
        <Route path="/analyze" element={<Analyze />} />
 
-        <Route
-  path="/history"
-  element={
-    <HistoryPage
-      onViewAnalysis={(analysisId) => {
-        window.location.href =
-          `/analyze?analysis_id=${encodeURIComponent(analysisId)}`;
-      }}
-    />
-  }
-/>
+       
       </Routes>
     </BrowserRouter>
   );

@@ -15,6 +15,7 @@ from backend.app.api.routes_analysis import router as analysis_router
 from backend.app.api.routes_feedback import router as feedback_router
 from backend.app.api.routes_health import router as health_router
 from backend.app.api.routes_history import router as history_router
+from backend.app.api.routes_metrics import router as metrics_router
 from backend.app.config import find_project_root, settings
 from backend.app.database.connection import mongodb
 from backend.app.services.ml_service import ml_service
@@ -153,6 +154,11 @@ app.include_router(
 
 app.include_router(
     feedback_router,
+    prefix=settings.API_PREFIX,
+)
+
+app.include_router(
+    metrics_router,
     prefix=settings.API_PREFIX,
 )
 

@@ -65,6 +65,15 @@ export async function deleteAnalysis(analysisId) {
 }
 
 // ============================================================
+// MODEL PERFORMANCE METRICS
+// ============================================================
+
+export async function getModelMetrics() {
+  const response = await api.get("/metrics");
+  return response.data;
+}
+
+// ============================================================
 // FEEDBACK
 // ============================================================
 
