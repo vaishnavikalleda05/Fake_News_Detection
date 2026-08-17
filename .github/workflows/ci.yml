@@ -40,8 +40,8 @@ jobs:
       - name: Run training smoke workflow
         run: |
           python src/train_model.py \
-            --real data/True.csv \
-            --fake data/Fake.csv \
+          --real data/true.csv \
+          --fake data/fake.csv \
             --outdir ci_outputs \
             --cv-folds 2 \
             --max-features 3000 \
@@ -52,8 +52,8 @@ jobs:
       - name: Run leakage-controlled training smoke workflow
         run: |
           python src/train_model.py \
-            --real data/True.csv \
-            --fake data/Fake.csv \
+            --real data/true.csv \
+            --fake data/fake.csv \
             --outdir ci_outputs_deleaked \
             --cv-folds 2 \
             --max-features 3000 \
