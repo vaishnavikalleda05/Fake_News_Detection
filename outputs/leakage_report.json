@@ -1,0 +1,50 @@
+{
+  "subject_distribution": {
+    "FAKE": {
+      "Government News": 531,
+      "News": 9050,
+      "US_News": 783,
+      "left-news": 705,
+      "politics": 6831,
+      "politicsNews": 0,
+      "worldnews": 0
+    },
+    "REAL": {
+      "Government News": 0,
+      "News": 0,
+      "US_News": 0,
+      "left-news": 0,
+      "politics": 0,
+      "politicsNews": 11216,
+      "worldnews": 9713
+    }
+  },
+  "contains_reuters_by_label": {
+    "FAKE": {
+      "count": 209,
+      "rate": 0.011675977653631285
+    },
+    "REAL": {
+      "count": 20891,
+      "rate": 0.9981843375220986
+    }
+  },
+  "heuristic_contains_reuters_accuracy": 0.9936387751422906,
+  "date_examples_by_label": {
+    "FAKE": [
+      "December 31, 2017",
+      "December 31, 2017",
+      "December 30, 2017",
+      "December 29, 2017",
+      "December 25, 2017"
+    ],
+    "REAL": [
+      "December 31, 2017 ",
+      "December 29, 2017 ",
+      "December 31, 2017 ",
+      "December 30, 2017 ",
+      "December 29, 2017 "
+    ]
+  },
+  "interpretation": "High performance on this dataset can be inflated by source/style artifacts. Use external validation before making real-world claims."
+}

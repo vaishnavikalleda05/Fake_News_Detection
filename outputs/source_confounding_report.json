@@ -1,0 +1,40 @@
+{
+  "group_col": "subject",
+  "available": true,
+  "n_groups": 7,
+  "crosstab": {
+    "Government News": {
+      "REAL": 0,
+      "FAKE": 531
+    },
+    "News": {
+      "REAL": 0,
+      "FAKE": 9050
+    },
+    "US_News": {
+      "REAL": 0,
+      "FAKE": 783
+    },
+    "left-news": {
+      "REAL": 0,
+      "FAKE": 705
+    },
+    "politics": {
+      "REAL": 0,
+      "FAKE": 6831
+    },
+    "politicsNews": {
+      "REAL": 11216,
+      "FAKE": 0
+    },
+    "worldnews": {
+      "REAL": 9713,
+      "FAKE": 0
+    }
+  },
+  "groups_with_real": 2,
+  "groups_with_fake": 5,
+  "confounding_score": 1.0,
+  "out_of_source_split_feasible": true,
+  "interpretation": "Both classes appear in multiple groups, so an out-of-source holdout (groups held out of training) is feasible and was attempted."
+}
