@@ -45,9 +45,6 @@ class Settings(BaseSettings):
     PORT: int = 8000
     DEBUG: bool = False
 
-    MONGODB_URI: str = "mongodb://localhost:27017"
-    MONGODB_DATABASE: str = "fake_news_detection"
-
     # Evidence Retrieval & Fact-Checking Provider Keys (Optional)
     GOOGLE_FACTCHECK_API_KEY: str | None = None
     TAVILY_API_KEY: str | None = None

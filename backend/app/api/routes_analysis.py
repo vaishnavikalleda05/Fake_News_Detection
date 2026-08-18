@@ -31,14 +31,6 @@ from backend.app.services.explanation_service import explanation_service
 from backend.app.services.ml_service import ml_service
 from backend.app.utils.logger import logger
 
-# MongoDB persistence
-from backend.app.database.connection import mongodb
-from backend.app.database.repositories import (
-    analysis_repository,
-    claim_repository,
-    evidence_repository,
-)
-
 
 router = APIRouter(prefix="/analyze", tags=["News Analysis"])
 
@@ -70,182 +62,6 @@ def _safe_value(value: Any, default: Any = None) -> Any:
     return value if value is not None else default
 
 
-async def _persist_analysis(
-    *,
-    analysis_id: str,
-    payload: CompleteAnalysisRequest,
-    ml_summary: MLAnalysisSummary,
-    verified_claims: list[Any],
-    evidence_map: dict[str, list[Any]],
-    final_result: Any,
-    decision_factors: Any,
-    decision_reason: str,
-    explanation: str,
-    analyzed_at: datetime,
-) -> bool:
-    """
-    Persist a completed analysis to MongoDB.
-
-    Database errors are intentionally isolated from the analysis pipeline.
-    A user should still receive an analysis result if MongoDB is unavailable.
-    """
-
-    if not mongodb.connected:
-        logger.warning(
-            "[%s] MongoDB unavailable; analysis was not persisted.",
-            analysis_id,
-        )
-        return False
-
-    try:
-        # ---------------------------------------------------------
-        # 1. Main analysis document
-        # ---------------------------------------------------------
-
-        final_result_data = _model_to_dict(final_result)
-
-        final_decision = getattr(
-            final_result,
-            "decision",
-            None,
-        )
-
-        final_confidence = getattr(
-            final_result,
-            "confidence",
-            None,
-        )
-
-        # Fallback in case final_result is represented as a dictionary.
-        if isinstance(final_result, dict):
-            final_decision = final_result.get(
-                "decision",
-                final_decision,
-            )
-            final_confidence = final_result.get(
-                "confidence",
-                final_confidence,
-            )
-
-        analysis_document: dict[str, Any] = {
-            "analysis_id": analysis_id,
-
-            # Authentication/user system will be added later.
-            "user_id": "anonymous",
-
-            "headline": payload.headline,
-            "article_text": payload.article_text,
-
-            "ml_prediction": ml_summary.prediction,
-            "ml_confidence": ml_summary.confidence,
-            "prob_fake": ml_summary.prob_fake,
-            "ml_model": ml_summary.model,
-
-            "final_decision": final_decision,
-            "final_confidence": final_confidence,
-
-           "decision_factors": _model_to_dict(decision_factors),
-            "decision_reason": decision_reason,
-            "explanation": explanation,
-
-            "total_claims": len(verified_claims),
-
-            "evidence_count": sum(
-                len(items)
-                for items in evidence_map.values()
-            ),
-
-            "final_result": final_result_data,
-
-            "created_at": analyzed_at,
-        }
-
-        await analysis_repository.create(
-            analysis_document
-        )
-
-        # ---------------------------------------------------------
-        # 2. Claims
-        # ---------------------------------------------------------
-
-        claim_documents: list[dict[str, Any]] = []
-
-        for claim in verified_claims:
-            claim_data = _model_to_dict(claim)
-
-            claim_id = claim_data.get(
-                "claim_id",
-                getattr(claim, "claim_id", None),
-            )
-
-            claim_documents.append(
-                {
-                    "analysis_id": analysis_id,
-                    "claim_id": claim_id,
-
-                    # Preserve the complete verified claim object.
-                    **claim_data,
-
-                    "created_at": analyzed_at,
-                }
-            )
-
-        if claim_documents:
-            await claim_repository.create_many(
-                claim_documents
-            )
-
-        # ---------------------------------------------------------
-        # 3. Evidence
-        # ---------------------------------------------------------
-
-        evidence_documents: list[dict[str, Any]] = []
-
-        for claim_id, evidence_items in evidence_map.items():
-
-            for evidence in evidence_items:
-                evidence_data = _model_to_dict(
-                    evidence
-                )
-
-                evidence_documents.append(
-                    {
-                        "analysis_id": analysis_id,
-                        "claim_id": claim_id,
-
-                        # Preserve the complete evidence object.
-                        **evidence_data,
-
-                        "created_at": analyzed_at,
-                    }
-                )
-
-        if evidence_documents:
-            await evidence_repository.create_many(
-                evidence_documents
-            )
-
-        logger.info(
-            "[%s] Analysis, claims, and evidence "
-            "successfully persisted to MongoDB.",
-            analysis_id,
-        )
-
-        return True
-
-    except Exception as exc:
-        logger.exception(
-            "[%s] MongoDB persistence failed: %s",
-            analysis_id,
-            exc,
-        )
-
-        # Important:
-        # Database failure must never make a successful
-        # fake-news analysis return HTTP 500.
-        return False
-
-
 # =====================================================================
 # COMPLETE ANALYSIS
 # =====================================================================
@@ -272,8 +88,8 @@ async def _persist_analysis(
         "Executes end-to-end fact-checking: ML stylistic risk classification, "
         "factual claim extraction, multi-source evidence retrieval, "
         "independent source scoring, claim-level stance verification, "
-        "hybrid decision engine synthesis, human-readable explanation "
-        "generation, and MongoDB persistence."
+        "hybrid decision engine synthesis, and human-readable explanation "
+        "generation."
     ),
 )
 async def analyze_complete(
@@ -439,35 +255,7 @@ async def analyze_complete(
         )
 
         # =========================================================
-        # 7. MongoDB Persistence
-        # =========================================================
-
-        persistence_success = await _persist_analysis(
-            analysis_id=analysis_id,
-            payload=payload,
-            ml_summary=ml_summary,
-            verified_claims=verified_claims,
-            evidence_map=evidence_map,
-            final_result=final_result,
-            decision_factors=decision_factors,
-            decision_reason=decision_reason,
-            explanation=explanation,
-            analyzed_at=analyzed_at,
-        )
-
-        if persistence_success:
-            logger.info(
-                "[%s] Persistence status: saved",
-                analysis_id,
-            )
-        else:
-            logger.warning(
-                "[%s] Persistence status: unavailable",
-                analysis_id,
-            )
-
-        # =========================================================
-        # 8. Return Complete Analysis
+        # 7. Return Complete Analysis
         # =========================================================
 
         return CompleteAnalysisResponse(

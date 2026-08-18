@@ -16,7 +16,6 @@ from backend.app.api.routes_analysis import router as analysis_router
 from backend.app.api.routes_health import router as health_router
 from backend.app.api.routes_metrics import router as metrics_router
 from backend.app.config import find_project_root, settings
-from backend.app.database.connection import mongodb
 from backend.app.services.ml_service import ml_service
 from backend.app.utils.logger import logger
 
@@ -61,25 +60,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         )
 
     # ---------------------------------------------------------
-    # Connect to MongoDB
-    # ---------------------------------------------------------
-    database_connected = await mongodb.connect(
-        settings.MONGODB_URI,
-        settings.MONGODB_DATABASE,
-    )
-
-    if database_connected:
-        logger.info(
-            "[OK] MongoDB connected successfully: %s",
-            settings.MONGODB_DATABASE,
-        )
-    else:
-        logger.warning(
-            "[WARN] MongoDB unavailable. "
-            "Application will continue without persistence."
-        )
-
-    # ---------------------------------------------------------
     # Application is ready
     # ---------------------------------------------------------
     yield
@@ -87,8 +67,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     # ---------------------------------------------------------
     # Shutdown
     # ---------------------------------------------------------
-    await mongodb.disconnect()
-
     logger.info(
         "Shutting down %s...",
         settings.PROJECT_NAME,

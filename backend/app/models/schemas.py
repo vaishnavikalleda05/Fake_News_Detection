@@ -385,8 +385,8 @@ class HealthResponse(BaseModel):
     )
     database: str = Field(
         default="unavailable",
-        examples=["connected"],
-        description="MongoDB connection status.",
+        examples=["unavailable"],
+        description="Database status (deprecated - database removed).",
     )
 
 class ErrorResponse(BaseModel):
