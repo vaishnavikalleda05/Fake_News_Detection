@@ -1,4 +1,4 @@
-# FactCheck AI
+# Fake News Detection
 
 **AI-powered fake news detection and multi-source claim verification system**
 
@@ -12,7 +12,7 @@
 
 ## Overview
 
-FactCheck AI is an educational full-stack system that detects fake news by combining **machine learning classification** with **multi-source evidence verification**. Instead of relying solely on text patterns, it:
+Fake News Detection is an educational full-stack system that detects fake news by combining **machine learning classification** with **multi-source evidence verification**. Instead of relying solely on text patterns, it:
 
 1. **Classifies articles** as REAL/FAKE using a trained ML model (TF-IDF + Logistic Regression)
 2. **Extracts verifiable claims** from article text automatically
@@ -851,9 +851,9 @@ This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) f
 If you use this project in research or applications, please cite:
 
 ```bibtex
-@software{factcheck_ai_2026,
-  title={FactCheck AI: AI-Powered Fake News Detection and Multi-Source Verification},
-  author={FactCheck AI Team},
+@software{fake_news_detection_2026,
+  title={Fake News Detection: AI-Powered Multi-Source Verification},
+  author={Fake News Detection Team},
   year={2026},
   url={https://github.com/your-org/Fake_News_Detection}
 }

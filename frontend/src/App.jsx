@@ -20,8 +20,8 @@ function Navbar() {
         </div>
 
         <div>
-          <div className="brand-name">FactCheck AI</div>
-          <div className="brand-subtitle">Fake News Detection</div>
+          <div className="brand-name">Fake News Detection</div>
+          <div className="brand-subtitle">AI Verification</div>
         </div>
       </div>
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train and evaluate FactCheck AI with an honest validation protocol."""
+"""Train and evaluate Fake News Detection with an honest validation protocol."""
 
 from __future__ import annotations
 

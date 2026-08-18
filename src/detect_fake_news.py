@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Command-line inference for the FactCheck AI text classifier."""
+"""Command-line inference for the Fake News Detection text classifier."""
 
 from __future__ import annotations
 

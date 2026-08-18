@@ -1,6 +1,6 @@
-# FactCheck AI - Complete Project Analysis
+# Fake News Detection - Complete Project Analysis
 
-**Project Name:** FactCheck AI (Fake News Detection & Multi-Source Verification)  
+**Project Name:** Fake News Detection  
 **Version:** 1.0.0 (Backend), 0.3.0 (Data Science)  
 **Architecture:** Full-Stack AI Application (Backend API + React Frontend + ML Pipeline)  
 **Status:** Functional educational/hackathon project
@@ -9,7 +9,7 @@
 
 ## 1. PROJECT OVERVIEW
 
-FactCheck AI is an **AI-powered fake news detection and claim verification system** that combines machine learning with multi-source evidence retrieval. It provides transparent FAKE/REAL assessments with confidence scores, verified claims, and supporting evidence.
+Fake News Detection is an **AI-powered fake news detection and claim verification system** that combines machine learning with multi-source evidence retrieval. It provides transparent FAKE/REAL assessments with confidence scores, verified claims, and supporting evidence.
 
 ### Core Capabilities
 
@@ -432,7 +432,7 @@ MAX_EVIDENCE_PER_CLAIM = 5
 ### 7.1 Page Structure
 
 **Navbar (Global):**
-- FactCheck AI branding
+- Fake News Detection branding
 - Navigation links (Dashboard, Analyze)
 - Icons from Lucide React
 
@@ -1075,7 +1075,7 @@ curl -X POST "http://localhost:8000/api/analyze/url" \
 
 ## 20. CONCLUSION
 
-FactCheck AI is a **sophisticated, production-ready educational project** demonstrating:
+Fake News Detection is a **sophisticated, production-ready educational project** demonstrating:
 - **Full-stack development** (backend API + frontend SPA)
 - **ML engineering** (honest evaluation, artifact control, leakage prevention)
 - **Explainable AI** (decision factors, evidence citations, human-readable explanations)
@@ -1091,5 +1091,5 @@ FactCheck AI is a **sophisticated, production-ready educational project** demons
 ---
 
 **Project Last Updated:** 2026-08-18  
-**Maintainer:** FactCheck AI Team  
+**Maintainer:** Fake News Detection Team  
 **License:** MIT

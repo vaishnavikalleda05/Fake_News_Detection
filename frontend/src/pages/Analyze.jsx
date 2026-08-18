@@ -780,7 +780,7 @@ setInputMode("text");
 
             <p>
               Submit a headline and article text.
-              FactCheck AI will analyze the content
+              Fake News Detection will analyze the content
               using machine learning, claims, evidence,
               and verification.
             </p>
@@ -931,7 +931,7 @@ setInputMode("text");
           </h2>
 
           <p>
-            FactCheck AI is processing the article
+            Fake News Detection is processing the article
             and checking available evidence.
           </p>
 
