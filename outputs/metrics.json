@@ -6,7 +6,7 @@
   },
   "random_state": 42,
   "threshold": 0.5,
-  "source_artifacts_stripped": true,
+  "source_artifacts_stripped": false,
   "dataset_profile": {
     "total_rows": 44898,
     "rows_after_deduplication": 38829,
@@ -25,113 +25,113 @@
   },
   "cross_validation_train_only": {
     "accuracy": {
-      "mean": 0.9864468754116508,
-      "std": 0.000689399966695906
+      "mean": 0.9920805823750701,
+      "std": 0.0007100007203177132
     },
     "macro_f1": {
-      "mean": 0.9863530946614549,
-      "std": 0.0006955714900286445
+      "mean": 0.9920286991383254,
+      "std": 0.0007141774140922223
     },
     "roc_auc": {
-      "mean": 0.9987307282726595,
-      "std": 0.0001575149460864455
+      "mean": 0.9993747448016052,
+      "std": 0.00011413934510775317
     }
   },
   "train": {
     "threshold": 0.5,
-    "accuracy": 0.9946882142742169,
-    "precision_fake": 0.9957968476357268,
-    "recall_fake": 0.9926675977653632,
-    "f1_fake": 0.9942297604476307,
-    "macro_f1": 0.9946544704537519,
+    "accuracy": 0.9974245887390143,
+    "precision_fake": 0.9983202687569989,
+    "recall_fake": 0.9960893854748604,
+    "f1_fake": 0.9972035794183445,
+    "macro_f1": 0.9974084010821658,
     "confusion_matrix": [
       [
-        16683,
-        60
+        16719,
+        24
       ],
       [
-        105,
-        14215
+        56,
+        14264
       ]
     ],
     "classification_report": {
       "REAL": {
-        "precision": 0.9937455325232308,
-        "recall": 0.9964164128292421,
-        "f1-score": 0.995079180459873,
+        "precision": 0.9966616989567809,
+        "recall": 0.9985665651316968,
+        "f1-score": 0.9976132227459872,
         "support": 16743.0
       },
       "FAKE": {
-        "precision": 0.9957968476357268,
-        "recall": 0.9926675977653632,
-        "f1-score": 0.9942297604476307,
+        "precision": 0.9983202687569989,
+        "recall": 0.9960893854748604,
+        "f1-score": 0.9972035794183445,
         "support": 14320.0
       },
-      "accuracy": 0.9946882142742169,
+      "accuracy": 0.9974245887390143,
       "macro avg": {
-        "precision": 0.9947711900794789,
-        "recall": 0.9945420052973026,
-        "f1-score": 0.9946544704537519,
+        "precision": 0.99749098385689,
+        "recall": 0.9973279753032787,
+        "f1-score": 0.9974084010821658,
         "support": 31063.0
       },
       "weighted avg": {
-        "precision": 0.9946911859504898,
-        "recall": 0.9946882142742169,
-        "f1-score": 0.9946875990100673,
+        "precision": 0.9974262973387504,
+        "recall": 0.9974245887390143,
+        "f1-score": 0.9974243777390065,
         "support": 31063.0
       }
     },
     "split": "train",
-    "roc_auc": 0.9997313602582852,
-    "average_precision": 0.9996834324125734
+    "roc_auc": 0.9998935267536138,
+    "average_precision": 0.9998744004458943
   },
   "holdout_test": {
     "threshold": 0.5,
-    "accuracy": 0.9872521246458924,
-    "precision_fake": 0.9920836867401753,
-    "recall_fake": 0.9801675977653631,
-    "f1_fake": 0.9860896445131375,
-    "macro_f1": 0.9871624693153923,
+    "accuracy": 0.993561679114087,
+    "precision_fake": 0.9955081414935429,
+    "recall_fake": 0.9905027932960894,
+    "f1_fake": 0.9929991598991879,
+    "macro_f1": 0.9935198421665188,
     "confusion_matrix": [
       [
-        4158,
-        28
+        4170,
+        16
       ],
       [
-        71,
-        3509
+        34,
+        3546
       ]
     ],
     "classification_report": {
       "REAL": {
-        "precision": 0.9832111610309766,
-        "recall": 0.9933110367892977,
-        "f1-score": 0.9882352941176471,
+        "precision": 0.9919124643196955,
+        "recall": 0.9961777353081701,
+        "f1-score": 0.9940405244338498,
         "support": 4186.0
       },
       "FAKE": {
-        "precision": 0.9920836867401753,
-        "recall": 0.9801675977653631,
-        "f1-score": 0.9860896445131375,
+        "precision": 0.9955081414935429,
+        "recall": 0.9905027932960894,
+        "f1-score": 0.9929991598991879,
         "support": 3580.0
       },
-      "accuracy": 0.9872521246458924,
+      "accuracy": 0.993561679114087,
       "macro avg": {
-        "precision": 0.9876474238855759,
-        "recall": 0.9867393172773304,
-        "f1-score": 0.9871624693153923,
+        "precision": 0.9937103029066192,
+        "recall": 0.9933402643021297,
+        "f1-score": 0.9935198421665188,
         "support": 7766.0
       },
       "weighted avg": {
-        "precision": 0.987301251430015,
-        "recall": 0.9872521246458924,
-        "f1-score": 0.9872461844622075,
+        "precision": 0.9935700131585281,
+        "recall": 0.993561679114087,
+        "f1-score": 0.993560472279061,
         "support": 7766.0
       }
     },
     "split": "holdout_test",
-    "roc_auc": 0.9992394173715524,
-    "average_precision": 0.9991524770048519
+    "roc_auc": 0.9997200698257293,
+    "average_precision": 0.9996847221859976
   },
   "source_confounding": {
     "group_col": "subject",
@@ -177,6 +177,6 @@
   "notes": [
     "Holdout metrics are more meaningful than training metrics, but the included dataset has known source/style leakage.",
     "See outputs/leakage_report.json before making real-world claims.",
-    "Source artifacts (Reuters datelines/mentions) were stripped before training; this metric is a more honest estimate of style-based separability."
+    "Source artifacts were NOT stripped; this metric is inflated by wire-source leakage. Re-run with --strip-source-artifacts for an honest estimate."
   ]
 }
