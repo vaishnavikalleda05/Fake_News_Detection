@@ -393,41 +393,4 @@ class ErrorResponse(BaseModel):
     """Standardized error payload."""
 
     detail: str = Field(..., description="Human-readable description of the error.")
-    error_code: str | None = Field(default=None, description="Optional application error code.")
-
-class FeedbackRequest(BaseModel):
-    """User feedback submitted for an analysis."""
-
-    analysis_id: str = Field(
-        ...,
-        min_length=1,
-        max_length=100,
-        description="Analysis ID receiving the feedback.",
-    )
-
-    helpful: bool = Field(
-        ...,
-        description="Whether the user found the analysis helpful.",
-    )
-
-    comment: str | None = Field(
-        default=None,
-        max_length=1000,
-        description="Optional user comment.",
-    )
-
-    user_id: str = Field(
-        default="anonymous",
-        min_length=1,
-        max_length=100,
-        description="User identifier.",
-    )
-
-
-class FeedbackResponse(BaseModel):
-    """Response returned after feedback is stored."""
-
-    success: bool
-    analysis_id: str
-    helpful: bool
-    message: str    
+    error_code: str | None = Field(default=None, description="Optional application error code.")    

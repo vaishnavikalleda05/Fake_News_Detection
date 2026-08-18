@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   AlertCircle,
   ArrowLeft,
@@ -17,7 +17,6 @@ import {
 import {
   analyzeArticle,
   analyzeArticleUrl,
-  getAnalysisById,
 } from "../services/api";
 
 function getDecisionInfo(decision) {
@@ -149,53 +148,12 @@ function ConfidenceMeter({ confidence }) {
 function Analyze() {
   const [inputMode, setInputMode] = useState("text");
 
-
   const [articleText, setArticleText] = useState("");
   const [articleUrl, setArticleUrl] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState(null);
-
-  // Load an existing analysis when opened from History
-  useEffect(() => {
-    const params = new URLSearchParams(
-      window.location.search,
-    );
-
-    const analysisId = params.get("analysis_id");
-
-    if (!analysisId) {
-      return;
-    }
-
-    const loadSavedAnalysis = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const data = await getAnalysisById(analysisId);
-
-        setResult(data);
-      } catch (err) {
-        console.error(
-          "Failed to load saved analysis:",
-          err,
-        );
-
-        setError(
-          err.response?.data?.detail ||
-            "Unable to load this saved analysis.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadSavedAnalysis();
-  }, []);
-
-
 
   const handleAnalyze = async (event) => {
   event.preventDefault();

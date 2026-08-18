@@ -19,7 +19,6 @@ Fake News Detection is an educational full-stack system that detects fake news b
 3. **Retrieves evidence** from multiple sources (Google Fact Check API, web search, Wikipedia)
 4. **Verifies claims** by comparing them against retrieved evidence
 5. **Generates transparent explanations** combining ML confidence with evidence analysis
-6. **Persists results** in MongoDB for historical review
 
 The system achieves **99.64% accuracy** on its holdout test set and provides end-to-end transparency through decision factors, evidence citations, and human-readable explanations.
 
@@ -69,12 +68,6 @@ The system achieves **99.64% accuracy** on its holdout test set and provides end
   - Evidence citations with source URLs
   - Transparency into ML and verification signals
 
-- **History & Persistence**
-  - MongoDB-backed analysis history
-  - Graceful degradation if database unavailable
-  - User-specific analysis retrieval
-  - Delete historical analyses
-
 - **Web Interface**
   - React SPA with modern UI
   - Dashboard showing model metrics
@@ -89,7 +82,6 @@ The system achieves **99.64% accuracy** on its holdout test set and provides end
 - **Framework**: FastAPI >= 0.110.0 (async Python web framework)
 - **Server**: Uvicorn >= 0.28.0 (ASGI)
 - **Validation**: Pydantic 2.6+ (data schemas & settings)
-- **Database**: MongoDB + Motor (async driver) + PyMongo
 - **ML Pipeline**: scikit-learn (TF-IDF, Logistic Regression)
 - **Data Processing**: pandas >= 2.0, numpy >= 1.25
 - **HTTP Client**: httpx >= 0.27.0 (async)
@@ -116,7 +108,6 @@ The system achieves **99.64% accuracy** on its holdout test set and provides end
 
 - **Python 3.10 or higher**
 - **Node.js & npm** (for frontend development)
-- **MongoDB** (optional; application runs without persistence if unavailable)
 - **git**
 
 ### Optional (for external evidence providers)
@@ -210,10 +201,6 @@ MODEL_PATH=outputs/pipeline.joblib
 # CORS (Frontend URLs)
 CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:3000,http://127.0.0.1:3000
 
-# Database
-MONGODB_URI=mongodb://localhost:27017
-MONGODB_DATABASE=fake_news_detection
-
 # Optional API Keys (leave empty to skip provider)
 GOOGLE_FACTCHECK_API_KEY=
 TAVILY_API_KEY=
@@ -234,20 +221,6 @@ cp backend/.env.example backend/.env
 ```
 
 The same configuration applies; both files are checked by the application.
-
-### MongoDB Setup (Optional)
-
-If you want to persist analysis history:
-
-```bash
-# Start MongoDB (ensure it's installed)
-mongod --dbpath ./db_data
-
-# Or use a MongoDB service/container
-docker run -d -p 27017:27017 --name mongodb mongo:latest
-```
-
-If MongoDB is unavailable, the application continues without persistence.
 
 ---
 
@@ -350,13 +323,8 @@ Fake_News_Detection/
 │       ├── config.py                  # Settings (Pydantic)
 │       ├── api/                       # Route handlers
 │       │   ├── routes_analysis.py     # Analysis endpoints
-│       │   ├── routes_feedback.py     # Feedback collection
 │       │   ├── routes_health.py       # Health check
-│       │   ├── routes_history.py      # History management
 │       │   └── routes_metrics.py      # Model metrics
-│       ├── database/                  # MongoDB integration
-│       │   ├── connection.py          # Async connection
-│       │   └── repositories.py        # Data access layer
 │       ├── models/                    # Pydantic schemas
 │       │   └── schemas.py             # Request/response models
 │       ├── providers/                 # External API providers
@@ -673,9 +641,6 @@ python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000
 
 # Terminal 2: Frontend dev server
 cd frontend && npm run dev
-
-# Terminal 3 (optional): MongoDB
-mongod --dbpath ./db_data
 ```
 
 ### Production Deployment
@@ -698,7 +663,6 @@ mongod --dbpath ./db_data
 4. **Start Services**
    - **Backend**: `python -m uvicorn backend.app.main:app --host 0.0.0.0 --port 8000`
    - **Frontend**: Serve `frontend/dist/` with a web server (nginx, Apache, etc.)
-   - **Database**: Ensure MongoDB is running and accessible
 
 5. **Verify Health**
    - Check `http://your-domain:8000/api/health`
@@ -709,7 +673,7 @@ mongod --dbpath ./db_data
 This project does not currently include Docker or Kubernetes configurations. For containerized deployment, you would need to:
 - Create a `Dockerfile` for the backend (Python 3.10 base image)
 - Create a `Dockerfile` for the frontend (Node build stage + nginx serving)
-- Create a `docker-compose.yml` to orchestrate services and MongoDB
+- Create a `docker-compose.yml` to orchestrate services
 
 ---
 
@@ -792,15 +756,6 @@ See `outputs/leakage_report.json` for detailed leakage analysis.
 2. Ensure Python 3.10+ is installed
 3. Check that scikit-learn and joblib are installed
 4. Train a new model: `python src/train_model.py --real data/true.csv --fake data/fake.csv --outdir outputs`
-
-### MongoDB Connection Error
-
-**Message**: "MongoDB unavailable. Application will continue without persistence."
-
-**Solutions**:
-1. Start MongoDB: `mongod --dbpath ./db_data`
-2. Verify connection string in `.env` (default: `mongodb://localhost:27017`)
-3. App functions normally without DB; just no persistence
 
 ### CORS Errors in Browser
 
