@@ -161,6 +161,7 @@ app.include_router(
     metrics_router,
     prefix=settings.API_PREFIX,
 )
+app.include_router(metrics_router, prefix="/api")
 
 @app.get("/", tags=["Root"], include_in_schema=False)
 async def root_redirect() -> dict[str, str]:

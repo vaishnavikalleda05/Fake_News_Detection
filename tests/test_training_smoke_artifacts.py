@@ -140,11 +140,13 @@ def test_holdout_predictions_have_expected_schema(smoke_outdir: Path) -> None:
 def test_cli_prediction_json_has_expected_schema() -> None:
     raw = os.environ.get("FAKE_NEWS_PREDICTION_JSON")
     if not raw:
-        pytest.skip("FAKE_NEWS_PREDICTION_JSON is not set; CI validates CLI prediction output.")
+        pytest.skip(
+            "FAKE_NEWS_PREDICTION_JSON is not set; CI validates CLI prediction output."
+        )
 
     prediction = read_json(Path(raw))
-    assert prediction["label"] in {"REAL", "FAKE", "UNCERTAIN"}
+    assert prediction["label"] in {"REAL", "FAKE"}
     assert 0.0 <= float(prediction["prob_fake"]) <= 1.0
     assert 0.0 <= float(prediction["threshold"]) <= 1.0
-    assert float(prediction["uncertainty_margin"]) >= 0.0
+    assert "uncertainty_margin" not in prediction
     assert prediction["model_path"].endswith("pipeline.joblib")

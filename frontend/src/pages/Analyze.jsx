@@ -29,7 +29,7 @@ function getDecisionInfo(decision) {
     normalized === "SUPPORTED"
   ) {
     return {
-      label: decision,
+      label: "REAL",
       description: "The available analysis supports this content.",
       className: "decision-positive",
       icon: CheckCircle2,
@@ -42,7 +42,7 @@ function getDecisionInfo(decision) {
     normalized === "CONTRADICTED"
   ) {
     return {
-      label: decision,
+      label: "FAKE",
       description:
         "The machine-learning analysis indicates that this content may be unreliable.",
       className: "decision-negative",
@@ -51,11 +51,11 @@ function getDecisionInfo(decision) {
   }
 
   return {
-    label: decision || "UNCERTAIN",
+    label: "FAKE",
     description:
-      "The available evidence is not sufficient to make a strong determination.",
-    className: "decision-neutral",
-    icon: Info,
+      "The analysis indicates that this content may be unreliable.",
+    className: "decision-negative",
+    icon: ShieldAlert,
   };
 }
 
@@ -327,7 +327,7 @@ setInputMode("text");
 </span>
 
 <h2>
-  {decisionInfo.label || "UNCERTAIN"}
+  {decisionInfo.label}
 </h2>
 
 <div className="result-confidence-text">
